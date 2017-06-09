@@ -26,6 +26,7 @@ class DdvFile extends \DdvPhp\DdvFile\DdvFileBase
   public function getFileIdOne(array $data = array()){
     $this->getFileIdOneCheckInputData($data);
     
+
   }
 
 }
