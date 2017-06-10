@@ -9,7 +9,7 @@ use \DdvPhp\DdvFile\Exception\Input as InputException;
  *
  * Wrapper around PHPMaile
  *
- * @package DdvPhp\DdvFile\CoreExtends\BaseApi
+ * @package DdvPhp\DdvFile\Core
  */
 abstract class Base
 {
@@ -65,8 +65,12 @@ abstract class Base
   ){
     // 存储驱动
     $this->driver = $driver;
+    // 打开驱动
+    $this->driver->open();
     // 数据库模型
     $this->database = $database;
+    // 打开数据库模型
+    $this->database->open();
     // 属性代理初始化
     $this->attrProxyInit();
     // 调用代理初始化

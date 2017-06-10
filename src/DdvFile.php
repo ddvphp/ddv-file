@@ -33,6 +33,16 @@ class DdvFile extends \DdvPhp\DdvFile\Core\Base
   public function getFileId(array $data=array()){
     return DdvCore\GetFileId::run($this->call, $this->attr, $data);
   }
+  /**
+   * [第三步]获取文件块信息
+   * @author: 桦 <yuchonghua@163.com>
+   * @DateTime 2017-06-10T20:16:18+0800
+   * @param    array                    $data [description]
+   * @return   [type]                         [description]
+   */
+  public function getFilePartInfo(array $data=array()){
+    return DdvCore\GetFilePartInfo::run($this->call, $this->attr, $data);
+  }
   public function getFileIdInputKeys(array $extendKeys=array()){
     return array_merge($this->sysGetFileIdInputKeys, $extendKeys);
   }

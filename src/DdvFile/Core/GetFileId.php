@@ -8,9 +8,7 @@ use \DdvPhp\DdvFile\Exception\Input as InputException;
 /**
  * Class GetFileId
  *
- * Wrapper around PHPMaile
- *
- * @package DdvPhp\DdvFile\CoreExtends\Util
+ * @package DdvPhp\DdvFile\Core
  */
 final class GetFileId
 {
@@ -171,7 +169,10 @@ final class GetFileId
     $resData['sourceUrl'] = $driver->getUrlByPath($resData['sourcePath']);
     // 判断是否使用文件索引系统
     if ($attr('fileIndex')===true) {
-      // 文件索引模块开始
+      // 文件索引模块 - 必须有uid
+      if ($uid===null) {
+        throw new \DdvPhp\DdvFile\Exception\Sys('文件索引必须传入uid','UID_ERROR_BY_DDVFILE');
+      }
     }else{
       // 直接使用源路径
       $resData['path'] = $resData['sourcePath'];

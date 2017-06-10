@@ -10,7 +10,7 @@ use \DdvPhp\DdvFile\Exception\Input as InputException;
  *
  * Wrapper around PHPMaile
  *
- * @package DdvPhp\DdvFile\CoreExtends\Util
+ * @package DdvPhp\DdvFile\Core
  */
 final class GetPartSize
 {

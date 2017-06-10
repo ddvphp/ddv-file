@@ -6,7 +6,7 @@ namespace DdvPhp\DdvFile\Database;
  */
 interface HandlerInterface
 {
-  public function open($driverConfig);
+  public function open($config);
   public function close();
   /**
    * 通过索引url查询文件id
@@ -67,4 +67,13 @@ interface HandlerInterface
    * [uid,id,partMd5Lower,partMd5Upper,type,name,lastModified,status]
    */
   public function getListsByCrc32Sha1Md5($offset, $size, $md5, $sha1, $crc32, $status = null);
+  /**
+   * 更新文件数据库，通过指定fileId更新data
+   * @author: 桦 <yuchonghua@163.com>
+   * @DateTime 2017-06-10T20:45:12+0800
+   * @param    [type]                   $id   [description]
+   * @param    [type]                   $data [description]
+   * @return   [type]                         [description]
+   */
+  public function updateFileInfoByFileID($id, array $data);
 }
