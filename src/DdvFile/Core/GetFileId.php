@@ -128,6 +128,8 @@ final class GetFileId
         // 容错, 没有找到这个文件
       }
     }
+    // 获取数据库模型
+    $driver = $attr('driver');
     // 如果没有找到文件信息，估计只能创建全新的了
     if (!$fileInfo) {
       $tempData = $call('getPartSize', $data);
@@ -159,27 +161,41 @@ final class GetFileId
         // 创建时间
         'create_time'=> time(),
       );
-      $fileNameNew = (string)mt_rand(10000,99999);
-      // 组装新的文件名[不带后缀名]
-      $fileNameNew .= substr( $data['fileMd5'], 4, 4 ) . substr( md5($data['filePartMd5Lower']), 4, 4 ) .substr( md5($data['filePartMd5Upper']), 4, 4 ) .substr( $data['fileSha1'], 8, 4 )  .substr( $data['fileCrc32'], 0, 4 ) ;
-      // 如果有扩展名就补上扩展名
-      if (!empty($dbData['ext_name'])) {
-        $fileNameNew .= '.'.$dbData['ext_name'];
-      }
-      $dbData['file_path'] = empty($data['directory'])?'/':$data['directory'];
-      if (substr($dbData['file_path'],-1) !== '/') {
-        $dbData['file_path'] .= '/';
-      }
-      // 文件相对地址
-      $dbData['file_path'] .= $fileNameNew;
+      $dbData['file_path'] = method_exists($driver, 'getFilePath') ? $driver->getFilePath($data) : self::getFilePath($data);
       // 添加到数据库
       $fileId = (string)$db->insertFileInfo($dbData);
       // 输出文件原始相对路径
       $resData['sourcePath'] = $dbData['file_path'];
     }
     // 输出文件原url
-    $resData['sourceUrl'] = $resData['sourcePath'];
+    $resData['sourceUrl'] = $driver->getUrlByPath($resData['sourcePath']);
+    // 判断是否使用文件索引系统
+    if ($attr('fileIndex')===true) {
+      // 文件索引模块开始
+    }else{
+      // 直接使用源路径
+      $resData['path'] = $resData['sourcePath'];
+      $resData['url'] = $resData['sourceUrl'];
+    }
+    // 返回结果
     return $resData;
+  }
+  public static function getFilePath($data){
+    $fileNameNew = (string)bin2hex(random_bytes(3));
+    // 组装新的文件名[不带后缀名]
+    $fileNameNew .= substr( $data['fileMd5'], 4, 4 ) . substr( md5($data['filePartMd5Lower']), 4, 4 ) .substr( md5($data['filePartMd5Upper']), 4, 4 ) .substr( $data['fileSha1'], 8, 4 )  .substr( $data['fileCrc32'], 0, 4 ) ;
+    $extName = empty($data['fileName']) ? '' : self::getExtension($data['fileName']);
+    // 如果有扩展名就补上扩展名
+    if (!empty($extName)) {
+      $fileNameNew .= '.'.$extName;
+    }
+    $filePath = empty($data['directory'])?'/':$data['directory'];
+    if (substr($filePath,-1) !== '/') {
+      $filePath .= '/';
+    }
+    // 文件相对地址
+    $filePath .= $fileNameNew;
+    return $filePath;
   }
   public static function getExtension($file){
     return pathinfo($file, PATHINFO_EXTENSION);

@@ -20,7 +20,7 @@ abstract class Base
   // 调用代理
   protected $call;
   // 存储驱动
-  protected $drivers;
+  protected $driver;
   // 数据库模型
   protected $database;
   // 默认一块最小字节数
@@ -29,6 +29,8 @@ abstract class Base
   protected $partSizeMax = 0;
   // 默认一共可以多少块
   protected $partSumMax = 0;
+  // 文件索引模式
+  protected $fileIndex = FALSE;
   // 允许设备
   protected $sysDeviceType = array('ios','android','html5','htmlswf','html4','wxmp');
   // 默认需要的key
@@ -57,12 +59,12 @@ abstract class Base
   public function __construct(
     $config = null,
     // 存储驱动
-    \DdvPhp\DdvFile\Drivers\HandlerInterface $drivers,
+    \DdvPhp\DdvFile\Drivers\HandlerInterface $driver,
     // 数据库模型
     \DdvPhp\DdvFile\Database\HandlerInterface $database
   ){
     // 存储驱动
-    $this->drivers = $drivers;
+    $this->driver = $driver;
     // 数据库模型
     $this->database = $database;
     // 属性代理初始化
@@ -74,7 +76,7 @@ abstract class Base
   }
   //配置信息初始化
   protected function attrProxyInit(){
-    $this->attr = function ($name) {
+    $this->attr = function &($name) {
       $num = func_num_args();
       $name = $num > 0 ? func_get_arg(0) : null;
       if ($num===1) {
