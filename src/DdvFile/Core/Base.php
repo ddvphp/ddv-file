@@ -51,6 +51,8 @@ abstract class Base
     'filePartMd5Upper',
     // 文件最后修改时间
     'lastModified',
+    // 设备类型
+    'deviceType'
   );
   public function __construct(
     $config = null,
