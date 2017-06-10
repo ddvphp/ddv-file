@@ -71,12 +71,11 @@ class LaravelMysqlDatabase implements \DdvPhp\DdvFile\Database\HandlerInterface
    * @param    string                   $md5      [必填，文件md5]
    * @param    string                   $sha1     [必填，文件sha1]
    * @param    string                   $crc32    [必填，文件crc32]
-   * @param    string                   $uid      [可选，用户uid]
    * @param    null|string              $status   [默认null, null全部状态, 如果指定就查某一个状态]
    * @return   Array                              [二维数组]
    * [uid,id,partMd5Lower,partMd5Upper,type,name,lastModified,status]
    */
-  public function getListsByCrc32Sha1Md5($offset, $size, $md5, $sha1, $crc32, $uid = null, $status = null){
+  public function getListsByCrc32Sha1Md5($offset, $size, $md5, $sha1, $crc32, $status = null){
 
   }
 }

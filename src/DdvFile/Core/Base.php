@@ -13,6 +13,8 @@ use \DdvPhp\DdvFile\Exception\Input as InputException;
  */
 abstract class Base
 {
+  // 是否使用uid
+  protected $uid = null;
   // 属性代理
   protected $attr;
   // 调用代理
@@ -105,6 +107,8 @@ abstract class Base
     $this->partSizeMax = isset($config['partSizeMax'])?intval($config['partSizeMax']):(15*1024*1024);
     //默认一共可以多少块
     $this->partSumMax = isset($config['partSumMax'])?intval($config['partSumMax']):(1000);
+    //设置用户uid
+    $this->uid = isset($config['uid'])?$config['uid']:$this->uid;
 
   }
 }
