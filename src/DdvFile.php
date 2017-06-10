@@ -2,6 +2,7 @@
 
 namespace DdvPhp;
 use const null;
+use DdvPhp\DdvFile\Core as DdvCore;
 
 /**
  * Class DdvFile
@@ -10,23 +11,30 @@ use const null;
  *
  * @package DdvPhp\DdvFile
  */
-class DdvFile extends \DdvPhp\DdvFile\DdvFileBase
+class DdvFile extends \DdvPhp\DdvFile\Core\Base
 {
-  public function __construct($config = null)
-  {
-    method_exists(parent::class, '__construct') && parent::__construct($config);
-  }
   /**
-   * [getFileIdOne 获取一个文件的上传id]
+   * [第一步]获取文件分块建议大小
    * @author: 桦 <yuchonghua@163.com>
-   * @DateTime 2016-04-15T14:10:25+0800
+   * @DateTime 2017-06-10T16:29:07+0800
    * @param    array                    $data [description]
    * @return   [type]                         [description]
    */
-  public function getFileIdOne(array $data = array()){
-    $this->getFileIdOneCheckInputData($data);
-    
-
+  public function getPartSize(array $data=array()){
+    return DdvCore\GetPartSize::run($this->call, $this->attr, $data);
+  }
+  /**
+   * [第二步]获取文件上传fileId
+   * @author: 桦 <yuchonghua@163.com>
+   * @DateTime 2017-06-10T16:28:25+0800
+   * @param    array                    $data [description]
+   * @return   [type]                         [description]
+   */
+  public function getFileId(array $data=array()){
+    return DdvCore\GetFileId::run($this->call, $this->attr, $data);
+  }
+  public function getFileIdInputKeys(array $extendKeys=array()){
+    return array_merge($this->sysGetFileIdInputKeys, $extendKeys);
   }
 
 }
