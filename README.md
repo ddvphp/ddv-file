@@ -21,16 +21,16 @@ composer require ddvphp/ddv-file
 >首先客户端[**IOS** **安卓** **Html5** **flash**]获取文件大小，
 >调用一下接口，获取到分块大小以及总分块数
 
->**==服务户端计算规则==**
->定义 `$part_size_min = 400*1024`;
->定义 `$part_size_max = 15*1024*1024`;
->计算 `$part_size =  ceil(max($file_size/1000 , $part_size_min))`
->判断 `$part_size`如果大于`$part_size_max`抛出异常 暂时不能上传大于15G的文件
->计算 `$part_sum = ceil($file_size/$part_size)`
->判断 `$part_sum`如果大于`1000`抛出异常 可以等于 `1000` 暂时不能上传大于15G的文件
->`因为我们的服务器目前设定最大接受上传15G 另外分块太大也给移动端带来压力`
->`分块大小计算 是 取大原则` `向上去整`
->**==服务户端计算规则==**
+>* **==服务户端计算规则==**
+>* 定义 `$part_size_min = 400*1024`;
+>* 定义 `$part_size_max = 15*1024*1024`;
+>* 计算 `$part_size =  ceil(max($file_size/1000 , $part_size_min))`
+>* 判断 `$part_size`如果大于`$part_size_max`抛出异常 暂时不能上传大于15G的文件
+>* 计算 `$part_sum = ceil($file_size/$part_size)`
+>* 判断 `$part_sum`如果大于`1000`抛出异常 可以等于 `1000` 暂时不能上传大于15G的文件
+>* `因为我们的服务器目前设定最大接受上传15G 另外分块太大也给移动端带来压力`
+>* `分块大小计算 是 取大原则` `向上去整`
+>* **==服务户端计算规则==**
 
 ###### 请求地址：**v1_0/upload/filePartSize**
 ###### 使用说明：获取分块大小
