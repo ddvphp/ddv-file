@@ -133,6 +133,9 @@ class AliyunOssDrivers implements \DdvPhp\DdvFile\Drivers\HandlerInterface
   }
   public function getObjectKeyByPath($path){
     $objectKey = $path;
+    if (substr($objectKey,0,1) === '/') {
+      $objectKey = substr($objectKey,1);
+    }
     return $objectKey;
   }
   /**
