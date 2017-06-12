@@ -62,7 +62,7 @@ final class GetFilePartMd5
 
 
 
-    $result = $driver->getUploadPartSign($fileInfo['path'], (string)$fileInfo['upload_id'], $data['partNumber'], $data['partLength'], $data['contentMd5'], $fileInfo['type']);
+    $result = $driver->getUploadPartSign($fileInfo['path'], (string)$fileInfo['upload_id'], $data['partNumber'], $data['partLength'], $data['md5Base64'], $fileInfo['type']);
 
     $resData = array_merge($resData, $result);
     //是否数组形式返回头

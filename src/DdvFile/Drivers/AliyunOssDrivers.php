@@ -10,6 +10,7 @@ class AliyunOssDrivers implements \DdvPhp\DdvFile\Drivers\HandlerInterface
 {
   private $client;
   private $config;
+  private $getUrlByPathFn;
   public function __construct($config){
     $this->config = $config;
   }
@@ -23,6 +24,9 @@ class AliyunOssDrivers implements \DdvPhp\DdvFile\Drivers\HandlerInterface
   public function close(){
 
   }
+  public function setGetUrlByPath(\Closure $fn){
+    $this->getUrlByPathFn = $fn;
+  }
   /**
    * 文件path转url
    * @author: 桦 <yuchonghua@163.com>
@@ -31,7 +35,11 @@ class AliyunOssDrivers implements \DdvPhp\DdvFile\Drivers\HandlerInterface
    * @return   [type]                        [description]
    */
   public function getUrlByPath($path){
-    return 'http://file.cdn.ping-qu.com/'.$path;
+    $fn = $this->getUrlByPathFn;
+    if ($fn instanceof \Closure) {
+      return $fn($path);
+    }
+    return 'http://pingqu-test.oss-cn-shenzhen.aliyuncs.com/'.$path;
   }
   /**
    * 获取上传id
