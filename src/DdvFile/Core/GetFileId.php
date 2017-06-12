@@ -28,9 +28,9 @@ final class GetFileId
           $rdata=self::getOne($call, $attr, $data[$key]);
         } catch (\DdvPhp\DdvFile\Exception $e) {
           $rdata['statusCode'] = method_exists($e,'getCode') ? $e->getCode() : 500;
-          $rdata['error_id'] = method_exists($e,'getErrorId') ? $e->getErrorId() : 'UNKNOWN_ERROR';
-          $rdata['msg'] = $e->getMessage();
-          $rdata['msg'] = empty($rdata['msg'])?'':$rdata['msg'];
+          $rdata['errorId'] = method_exists($e,'getErrorId') ? $e->getErrorId() : 'UNKNOWN_ERROR';
+          $rdata['message'] = $e->getMessage();
+          $rdata['message'] = empty($rdata['message'])?'':$rdata['message'];
         }
         $r[] = $rdata;
       }
@@ -85,7 +85,7 @@ final class GetFileId
       'isUploadEnd' => false
     );
     // 如果有uid
-    if ($uid) {
+    if ((!empty($uid)) || (is_string($uid)&&$uid==='0') ) {
       try {
         // 试图获取该用户是否上传过该文件
         $fileId = $db->getFileIdByCrc32Sha1Md5Uid($data['fileMd5'], $data['fileSha1'], $data['fileCrc32'], (string)$attr('uid'));
@@ -119,7 +119,7 @@ final class GetFileId
         // 输出文件id
         $resData['fileId'] = $fileId;
         // 输出文件原始相对路径
-        $resData['sourcePath'] = $fileInfo['file_path'];
+        $resData['sourcePath'] = $fileInfo['path'];
         // 返回文件的上传状态是否完成
         $resData['isUploadEnd'] = $fileInfo['status'] === 'OK';
       } catch (\DdvPhp\DdvFile\Exception\Database $e) {
@@ -139,33 +139,34 @@ final class GetFileId
         // 扩展名
         'ext_name' => self::getExtension($data['fileName']),
         // 文件名
-        'file_name'=> $data['fileName'],
+        'name'=> $data['fileName'],
         // 文件大小
-        'file_size'=> $data['fileSize'],
+        'size'=> $data['fileSize'],
         // 文件md5
-        'file_md5'=> $data['fileMd5'],
+        'md5'=> $data['fileMd5'],
         // 文件sha1
-        'file_sha1'=> $data['fileSha1'],
+        'sha1'=> $data['fileSha1'],
         // 文件crc32
-        'file_crc32'=> $data['fileCrc32'],
+        'crc32'=> $data['fileCrc32'],
         // 文件类型
-        'file_type'=> $data['fileType'],
+        'type'=> $data['fileType'],
         // 文件块小写md5集合的md5
-        'file_part_md5_lower'=> $data['filePartMd5Lower'],
+        'part_md5_lower'=> $data['filePartMd5Lower'],
         // 文件块大写md5集合的md5
-        'file_part_md5_upper'=> $data['filePartMd5Upper'],
+        'part_md5_upper'=> $data['filePartMd5Upper'],
         // 文件最后修改时间
         'last_modified'=> $data['lastModified'],
         // 创建时间
         'create_time'=> time(),
       );
-      $dbData['file_path'] = method_exists($driver, 'getFilePath') ? $driver->getFilePath($data) : self::getFilePath($data);
+      $dbData['path'] = method_exists($driver, 'getFilePath') ? $driver->getFilePath($data) : self::getFilePath($data);
       // 添加到数据库
       $fileId = (string)$db->insertFileInfo($dbData);
       // 输出文件原始相对路径
-      $resData['sourcePath'] = $dbData['file_path'];
+      $resData['sourcePath'] = $dbData['path'];
     }
     // 输出文件原url
+    $resData['fileId'] = $fileId;
     $resData['sourceUrl'] = $driver->getUrlByPath($resData['sourcePath']);
     // 判断是否使用文件索引系统
     if ($attr('fileIndex')===true) {
@@ -173,6 +174,7 @@ final class GetFileId
       if ($uid===null) {
         throw new \DdvPhp\DdvFile\Exception\Sys('文件索引必须传入uid','UID_ERROR_BY_DDVFILE');
       }
+      // 更多逻辑
     }else{
       // 直接使用源路径
       $resData['path'] = $resData['sourcePath'];

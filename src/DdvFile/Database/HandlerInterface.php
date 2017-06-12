@@ -6,7 +6,7 @@ namespace DdvPhp\DdvFile\Database;
  */
 interface HandlerInterface
 {
-  public function open($config);
+  public function open();
   public function close();
   /**
    * 通过索引url查询文件id
@@ -15,7 +15,7 @@ interface HandlerInterface
    * @param    string                   $url      [必填，索引url]
    * @return   string                             [文件id]
    */
-  public function getFileIdByUrl($url);
+  public function getFileIdByIndexUrl($url);
   /**
    * 通过索引url查询文件信息
    * @author: 桦 <yuchonghua@163.com>
@@ -31,7 +31,7 @@ interface HandlerInterface
    * @param    string                   $url      [必填，索引url]
    * @return   string                             [源文件url]
    */
-  public function getSourceUrlByUrl($url);
+  public function getSourceUrlByIndexUrl($url);
   /**
    * 通过crc32、sha1、md5、uid查询文件id
    * @author: 桦 <yuchonghua@163.com>
@@ -66,14 +66,22 @@ interface HandlerInterface
    * @return   Array                              [二维数组]
    * [uid,id,partMd5Lower,partMd5Upper,type,name,lastModified,status]
    */
-  public function getListsByCrc32Sha1Md5($offset, $size, $md5, $sha1, $crc32, $status = null);
+  public function getListsByCrc32Sha1Md5($offset = 0, $size = 10, $md5, $sha1, $crc32, $status = null);
   /**
    * 更新文件数据库，通过指定fileId更新data
    * @author: 桦 <yuchonghua@163.com>
    * @DateTime 2017-06-10T20:45:12+0800
-   * @param    [type]                   $id   [description]
-   * @param    [type]                   $data [description]
-   * @return   [type]                         [description]
+   * @param    [type]                   $id       [description]
+   * @param    [type]                   $data     [description]
+   * @return   [type]                             [description]
    */
   public function updateFileInfoByFileID($id, array $data);
+  /**
+   * 插入文件表
+   * @author: 桦 <yuchonghua@163.com>
+   * @DateTime 2017-06-12T12:06:32+0800
+   * @param    array                    $data     [插入数据库的信息]
+   * @return   string                   $fileId   [返回文件id]
+   */
+  public function insertFileInfo(array $data);
 }

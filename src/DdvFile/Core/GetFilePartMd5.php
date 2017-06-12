@@ -6,13 +6,13 @@ use \DdvPhp\DdvFile\Exception\Input as InputException;
 
 
 /**
- * Class GetFilePartInfo
+ * Class GetFilePartMd5
  *
  * Wrapper around PHPMaile
  *
  * @package DdvPhp\DdvFile\Core
  */
-final class GetFilePartInfo
+final class GetFilePartMd5
 {
   /**
    * @author 桦 <yuchonghua@163.com>
@@ -45,10 +45,11 @@ final class GetFilePartInfo
     // 构建返回数据
     
     $resData = array(
-      'fileSize' => $fileInfo['size'],
-      'partSize' => $fileInfo['part_size'],
-      'partSum'  => $fileInfo['part_sum'],
-      'doneParts'=>array(),
+      'url' => '',
+      'method' => 'PUT',
+      'headers'  => array(),
+      'headersArray'=>array(),
+      'params'=>array(),
       'isUploadEnd' => (bool)($fileInfo['status'] === 'OK')
     );
 
@@ -59,24 +60,17 @@ final class GetFilePartInfo
     // 获取存储驱动
     $driver = $attr('driver');
 
-    try {
-      if (!empty($fileInfo['upload_id'])) {
-        $resData['doneParts'] = $driver->getUploadDoneParts($fileInfo['path'], (string)$fileInfo['upload_id']);
+
+
+    $result = $driver->getUploadPartSign($fileInfo['path'], (string)$fileInfo['upload_id'], $data['partNumber'], $data['partLength'], $data['contentMd5'], $fileInfo['type']);
+
+    $resData = array_merge($resData, $result);
+    //是否数组形式返回头
+    if (isset($data['isHeaderArray'])&&($data['isHeaderArray'] === true || ((string)$data['isHeaderArray']) === 'true' || ((string)$data['isHeaderArray']) === '1')) {
+      $r['headersArray'] = array();
+      foreach ($r['headers'] as $key => $value) {
+        $r['headersArray'][] = array($key,$value);
       }
-    } catch (\DdvPhp\DdvFile\Exception\Driver $e) {
-      $fileInfo['upload_id'] = '';
-    }
-    // 如果没有上传id
-    if (empty($fileInfo['upload_id'])) {
-      $tempData = array(
-        // 获取上传id
-        'upload_id'=>$driver->getUploadId($fileInfo['path'])
-      );
-      // 更新数据库
-      $db->updateFileInfoByFileID((string)$fileInfo['id'], $tempData);
-      // 释放数据
-      unset($tempData);
-      $resData['doneParts'] = array();
     }
 
     return $resData;

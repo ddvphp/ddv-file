@@ -43,6 +43,26 @@ class DdvFile extends \DdvPhp\DdvFile\Core\Base
   public function getFilePartInfo(array $data=array()){
     return DdvCore\GetFilePartInfo::run($this->call, $this->attr, $data);
   }
+  /**
+   * [第四步]获取每块md5
+   * @author: 桦 <yuchonghua@163.com>
+   * @DateTime 2017-06-12T15:48:21+0800
+   * @param    array                    $data [description]
+   * @return   [type]                         [description]
+   */
+  public function getFilePartMd5(array $data=array()){
+    return DdvCore\GetFilePartMd5::run($this->call, $this->attr, $data);
+  }
+  /**
+   * 合并文件
+   * @author: 桦 <yuchonghua@163.com>
+   * @DateTime 2017-06-12T16:09:13+0800
+   * @param    array                    $data [description]
+   * @return   [type]                         [description]
+   */
+  public function complete(array $data=array()){
+    return DdvCore\Complete::run($this->call, $this->attr, $data);
+  }
   public function getFileIdInputKeys(array $extendKeys=array()){
     return array_merge($this->sysGetFileIdInputKeys, $extendKeys);
   }

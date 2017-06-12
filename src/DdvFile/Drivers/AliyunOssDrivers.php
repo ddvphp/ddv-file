@@ -1,6 +1,7 @@
 <?php
 namespace DdvPhp\DdvFile\Drivers;
 use \DdvPhp\DdvFile\Exception\Driver as DriverException;
+use \OSS\OssClient as OssClient;
 
 /**
  * 
@@ -9,13 +10,15 @@ class AliyunOssDrivers implements \DdvPhp\DdvFile\Drivers\HandlerInterface
 {
   private $client;
   private $config;
-  public function __construct($driverConfig){
-    $this->config = $driverConfig;
+  public function __construct($config){
+    $this->config = $config;
   }
   public function open(){
-    $this->client = new \OSS\OssClient($this->config['accessKeyId'], $this->config['accessKeySecret'], $this->config['endpoint'], $this->config['isCName'], $this->config['securityToken']);
-    // $this->client = new \OSS\OssClient($accessKeyId, $accessKeySecret, $endpoint, $isCName = false, $securityToken = NULL);
-
+    try{
+      $this->client = new OssClient($this->config['accessKeyId'], $this->config['accessKeySecret'], $this->config['endpoint'], $this->config['isCName'], $this->config['securityToken']);
+    } catch(\OSS\Core\OssException $e) {
+      throw new DriverException($e->getMessage(), 'ALIYUN_OSS_DRIVERS_OPEN_FAIL');
+    }
   }
   public function close(){
 
@@ -28,7 +31,7 @@ class AliyunOssDrivers implements \DdvPhp\DdvFile\Drivers\HandlerInterface
    * @return   [type]                        [description]
    */
   public function getUrlByPath($path){
-    return 'http://xx.com/'.$path;
+    return 'http://file.cdn.ping-qu.com/'.$path;
   }
   /**
    * 获取上传id
@@ -38,12 +41,91 @@ class AliyunOssDrivers implements \DdvPhp\DdvFile\Drivers\HandlerInterface
    * @return   [type]                        [description]
    */
   public function getUploadId($path){
-    $objectKey = $path;
     try{
-      return $this->client->initiateMultipartUpload($this->config['bucket'], $objectKey);
+      return $this->client->initiateMultipartUpload($this->config['bucket'], $this->getObjectKeyByPath($path));
     } catch(\OSS\Core\OssException $e) {
       throw new DriverException($e->getMessage(), 'GET_UPLOAD_ID');
     }
+  }
+  /**
+   * 获取已经完成的分块
+   * @author: 桦 <yuchonghua@163.com>
+   * @DateTime 2017-06-12T15:12:34+0800
+   * @param    string                  $path [description]
+   * @param    string                   $uploadId [description]
+   * @return   array                              [description]
+   */
+  public function getUploadDoneParts($path, $uploadId){
+    if (empty($uploadId)) {
+      throw new DriverException("upload_id is empty", 'UPLOADID_MUST_HAS');
+    }
+    try {
+      $listUploadInfo = $this->client->listParts($this->config['bucket'], $this->getObjectKeyByPath($path), $uploadId);
+      $listParts = $listUploadInfo->getListPart();
+      $uploadParts = array();
+      foreach ($listParts as $part) {
+        $uploadParts[] = intval($part->getPartNumber());
+      }
+      return $uploadParts;
+    } catch(\OSS\Core\OssException $e) {
+      throw new DriverException($e->getMessage(), 'GET_UPLOAD_DONE_PARTS');
+    }
+  }
+  public function getUploadPartSign($path, $uploadId, $partNumber='1', $partLength=0, $md5Base64, $contentType='application/octet-stream'){
+    return $this->getUploadPartSignRun($path, $uploadId, $partNumber, $md5Base64, $contentType);
+  }
+  private function getUploadPartSignRun($path, $uploadId, $partNumber='1', $md5Base64, $contentType='application/octet-stream', $method=OssClient::OSS_HTTP_PUT,$timeout = 60){
+
+    if (empty($uploadId)) {
+      throw new DriverException("upload_id is empty", 'UPLOADID_MUST_HAS');
+    }
+    if (empty($partNumber)) {
+      throw new DriverException('part_number is empty', 'PART_NUMBER_MUST_HAS');
+    }
+    if (empty($md5Base64)) {
+      throw new DriverException('md5_base64 is empty', 'MD5_BASE_MUST_HAS');
+    }
+    $upOptions = array(
+      OssClient::OSS_UPLOAD_ID => $uploadId,
+      OssClient::OSS_PART_NUM => $partNumber,
+      OssClient::OSS_CONTENT_MD5 => $md5Base64,
+      OssClient::OSS_CONTENT_TYPE => $contentType
+    );
+
+    $r = array();
+    $r['url'] = $this->client->signUrl($this->config['bucket'], $this->getObjectKeyByPath($path), $timeout, $method, $upOptions);
+    $r['method'] = $method;
+    $r['headers'] = array();
+    $r['headers']['Content-Type'] = $contentType;
+    $r['headers']['Content-Md5'] = $md5Base64;
+    $r['params'] = array();
+    $r['params']['timeout'] = $timeout;
+    unset($upOptions);
+    return $r;
+  }
+  public function completeMultipartUpload($path, $uploadId){
+    if (empty($uploadId)) {
+      throw new DriverException("upload_id is empty", 'UPLOADID_MUST_HAS');
+    }
+    try {
+      $listUploadInfo = $this->client->listParts($this->config['bucket'], $this->getObjectKeyByPath($path), $uploadId);
+      $listParts = $listUploadInfo->getListPart();
+      $uploadParts = array();
+      foreach ($listParts as $part) {
+        $uploadParts[] = array(
+          'PartNumber'=>$part->getPartNumber(),
+          'ETag'=>$part->getETag()
+        );
+      }
+      return $this->client->completeMultipartUpload($this->config['bucket'], $this->getObjectKeyByPath($path), $uploadId, $uploadParts);
+    } catch(\OSS\Core\OssException $e) {
+      throw new DriverException($e->getMessage(), 'GET_UPLOAD_DONE_PARTS');
+    }
+
+  }
+  public function getObjectKeyByPath($path){
+    $objectKey = $path;
+    return $objectKey;
   }
   /**
    * 获取文件路径
