@@ -44,7 +44,7 @@ composer require ddvphp/ddv-file
 ---|--- |--- |--- 
 fileSize | int | 是 | 文件大小。
 fileType | string | 是 | 可以参考**[Mime 类型列表][1]** 未知类型为 **application/octet-stream**
-device_type | string | 是 | 设备类型 `ios` `android` `html5` `htmlswf` `html4` `wxmp`
+deviceType | string | 是 | 设备类型 `ios` `android` `html5` `htmlswf` `html4` `wxmp`
 
 样板数据
 
@@ -70,7 +70,7 @@ device_type | string | 是 | 设备类型 `ios` `android` `html5` `htmlswf` `htm
 
 ### 2、获取文件id
 
-> **前端读流方式计算文件的相关信息**
+>* **前端读流方式计算文件的相关信息**
 >*
 >* 以**partSize**的大小进行流式读取文件
 >* 计算文件的总内容的**md5**为**fileMd5**
