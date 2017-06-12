@@ -71,23 +71,23 @@ device_type | string | 是 | 设备类型 `ios` `android` `html5` `htmlswf` `htm
 ### 2、获取文件id
 
 > **前端读流方式计算文件的相关信息**
->
-> 以**partSize**的大小进行流式读取文件
-> 计算文件的总内容的**md5**为**fileMd5**
-> 计算文件的总内容的**sha1**为**fileSha1**
-> 计算文件的总内容的**crc32**为**fileCrc32**
-> 计算当前**每一块**的流的**二进制**的**md5**的**hex值** 并且拼接为**partMd5Str**
-> 比如**第一块**的**md5**是 **0fdf5be93cd24aeeaccb046406c3a643**
-> 比如**第二块**的**md5**是 **986f5be93cd24ae9accb047776c3a332**
-> 比如**第三块**的**md5**是 **85658be93cd24aeeaccb046406c3a757**
-> 使用**partMd5Str**  = **partMd5Str** + **{上一块md5}**
-> 那么**partMd5Str**是**0fdf5be93cd24aeeaccb046406c3a643986f5be93cd24ae9accb047776c3a33285658be93cd24aeeaccb046406c3a757**
->**partMd5Str**随着分块累计不停变长，但是**不会超过 1000*32=32000字节**
->最后 得到 **md5**、**sha1**、**crc32**
->还有 **filePartMd5Lower** = **md5(partMd5Str[转小写]) + '-' + partSum**
->还有 **filePartMd5Upper** = **md5(partMd5Str[转大写]) + '-' + partSum**
->得到 **filePartMd5Lower**为**4CF26963D7C141DEFBC985382538B43F-3**
->得到 **filePartMd5Upper**为**BB49107DFF0A0054DC67D94B1FFC5A24-3**
+>*
+>* 以**partSize**的大小进行流式读取文件
+>* 计算文件的总内容的**md5**为**fileMd5**
+>* 计算文件的总内容的**sha1**为**fileSha1**
+>* 计算文件的总内容的**crc32**为**fileCrc32**
+>* 计算当前**每一块**的流的**二进制**的**md5**的**hex值** 并且拼接为**partMd5Str**
+>* 比如**第一块**的**md5**是 **0fdf5be93cd24aeeaccb046406c3a643**
+>* 比如**第二块**的**md5**是 **986f5be93cd24ae9accb047776c3a332**
+>* 比如**第三块**的**md5**是 **85658be93cd24aeeaccb046406c3a757**
+>* 使用**partMd5Str**  = **partMd5Str** + **{上一块md5}**
+>* 那么**partMd5Str**是**0fdf5be93cd24aeeaccb046406c3a643986f5be93cd24ae9accb047776c3a33285658be93cd24aeeaccb046406c3a757**
+>* **partMd5Str**随着分块累计不停变长，但是**不会超过 1000*32=32000字节**
+>* 最后 得到 **md5**、**sha1**、**crc32**
+>* 还有 **filePartMd5Lower** = **md5(partMd5Str[转小写]) + '-' + partSum**
+>* 还有 **filePartMd5Upper** = **md5(partMd5Str[转大写]) + '-' + partSum**
+>* 得到 **filePartMd5Lower**为**4CF26963D7C141DEFBC985382538B43F-3**
+>* 得到 **filePartMd5Upper**为**BB49107DFF0A0054DC67D94B1FFC5A24-3**
 
 
 ###### 请求地址：**v1_0/upload/fileId**
