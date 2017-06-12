@@ -6,51 +6,54 @@ namespace DdvPhp\DdvFile\Drivers;
  */
 interface HandlerInterface
 {
-  public function open($driverConfig);
+  public function open();
   public function close();
   /**
-   * 通过索引url查询文件id
+   * 文件path转url
    * @author: 桦 <yuchonghua@163.com>
-   * @DateTime 2017-06-06T13:40:30+0800
-   * @param    string                   $url      [必填，索引url]
-   * @return   string                             [文件id]
+   * @DateTime 2017-06-10T19:37:20+0800
+   * @param    [type]                   $url [description]
+   * @return   [type]                        [description]
    */
-  public function getFileIdByUrl($url);
+  public function getUrlByPath($url);
   /**
-   * 通过索引url查询文件信息
+   * 
    * @author: 桦 <yuchonghua@163.com>
-   * @DateTime 2017-06-06T13:42:18+0800
-   * @param    string                   $fileID   [必填，文件id]
-   * @return   Array                              [文件信息]
+   * @DateTime 2017-06-10T20:29:23+0800
+   * @param    string                  $path [description]
+   * @return   [type]                        [description]
    */
-  public function getFileInfoByFileID($fileID);
+  public function getUploadId($path);
   /**
-   * 通过索引url查询文件源url
+   * 获取已经完成的分块
    * @author: 桦 <yuchonghua@163.com>
-   * @DateTime 2017-06-06T13:42:46+0800
-   * @param    string                   $url      [必填，索引url]
-   * @return   string                             [源文件url]
+   * @DateTime 2017-06-12T15:12:34+0800
+   * @param    string                  $path [description]
+   * @param    string                   $uploadId [description]
+   * @return   array                              [description]
    */
-  public function getSourceUrlByUrl($url);
+  public function getUploadDoneParts($path, $uploadId);
   /**
-   * 通过crc32、sha1、md5、uid查询文件id
+   * [getUploadPartSign description]
    * @author: 桦 <yuchonghua@163.com>
-   * @DateTime 2017-06-06T13:43:15+0800
-   * @param    string                   $crc32    [必填，文件crc32]
-   * @param    string                   $sha1     [必填，文件sha1]
-   * @param    string                   $md5      [必填，文件md5]
-   * @param    string                   $uid      [必填，用户id]
-   * @return   string                             [文件id]
+   * @DateTime 2017-06-12T16:22:44+0800
+   * @param    [type]                   $path          [description]
+   * @param    [type]                   $uploadId      [description]
+   * @param    string                   $partNumber    [description]
+   * @param    integer                  $partLength    [description]
+   * @param    [type]                   $md5Base64     [description]
+   * @param    string                   $contentType   [description]
+   * @param    boolean                  $isHeaderArray [description]
+   * @return   [type]                                  [description]
    */
-  public function getFileIdByCrc32Sha1Md5Uid($crc32, $sha1, $md5, $uid);
+  public function getUploadPartSign($path, $uploadId, $partNumber='1', $partLength=0, $md5Base64, $contentType='application/octet-stream');
   /**
-   * 查询文件列表,可以指定uid
+   * 合并
    * @author: 桦 <yuchonghua@163.com>
-   * @DateTime 2017-06-06T13:44:08+0800
-   * @param    string                   $pageNow  [必填，当前页]
-   * @param    string                   $pageSize [必填，每页数]
-   * @param    string                   $uid      [可选，用户uid]
+   * @DateTime 2017-06-12T16:23:07+0800
+   * @param    [type]                   $path     [description]
+   * @param    [type]                   $uploadId [description]
    * @return   [type]                             [description]
    */
-  public function getLists($pageNow, $pageSize, $uid = null);
+  public function completeMultipartUpload($path, $uploadId);
 }
