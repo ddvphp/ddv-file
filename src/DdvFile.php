@@ -7,8 +7,6 @@ use DdvPhp\DdvFile\Core as DdvCore;
 /**
  * Class DdvFile
  *
- * Wrapper around PHPMaile
- *
  * @package DdvPhp\DdvFile
  */
 class DdvFile
@@ -66,6 +64,13 @@ class DdvFile
   public function getFileIdInputKeys(array $extendKeys=array()){
     return array_merge($this->sysGetFileIdInputKeys, $extendKeys);
   }
+  public function getIndexPathUrl($fileIndex, $uid, $url, $path){
+    $resData = array(
+      'url' => $url,
+      'path' => $path
+    );
+
+  }
   public function __construct(
     $config = null,
     // 存储驱动
@@ -105,7 +110,7 @@ class DdvFile
   }
   //配置信息初始化
   protected function callProxyInit(){
-    $this->call = function &($name) {
+    $this->call = function ($name) {
       $num = func_num_args();
       if ($num>0) {
         $args = func_get_args();
@@ -120,13 +125,13 @@ class DdvFile
   //配置信息初始化
   protected function configBaseInit(array $config=array()){
     //默认一块最小字节数
-    $this->partSizeMin = isset($config['partSizeMin'])?intval($config['partSizeMin']):(400*1024);
+    $this->partSizeMin = isset($config['partSizeMin']) ? intval($config['partSizeMin']) : (400*1024);
     //默认一块最大字节数
-    $this->partSizeMax = isset($config['partSizeMax'])?intval($config['partSizeMax']):(15*1024*1024);
+    $this->partSizeMax = isset($config['partSizeMax']) ? intval($config['partSizeMax']) : (15*1024*1024);
     //默认一共可以多少块
-    $this->partSumMax = isset($config['partSumMax'])?intval($config['partSumMax']):(1000);
+    $this->partSumMax = isset($config['partSumMax']) ? intval($config['partSumMax']) : (1000);
     //设置用户uid
-    $this->uid = isset($config['uid'])?$config['uid']:$this->uid;
+    $this->uid = isset($config['uid']) ? $config['uid'] : $this->uid;
 
   }
   // 是否使用uid

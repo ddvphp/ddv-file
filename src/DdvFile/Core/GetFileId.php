@@ -169,11 +169,14 @@ final class GetFileId
     $resData['fileId'] = $fileId;
     $resData['sourceUrl'] = $driver->getUrlByPath($resData['sourcePath']);
     // 判断是否使用文件索引系统
-    if ($attr('fileIndex')===true) {
+    if ($attr('fileIndex')!==FALSE) {
       // 文件索引模块 - 必须有uid
       if ($uid===null) {
         throw new \DdvPhp\DdvFile\Exception\Sys('文件索引必须传入uid','UID_ERROR_BY_DDVFILE');
       }
+      $res = $call('getIndexPathUrl', $attr('fileIndex'), $uid, $resData['sourceUrl'], $resData['sourcePath']);
+      $resData['path'] = $res['path'];
+      $resData['url'] = $res['url'];
       // 更多逻辑
     }else{
       // 直接使用源路径
