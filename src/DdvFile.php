@@ -69,7 +69,7 @@ class DdvFile
       'url' => $url,
       'path' => $path
     );
-
+    return $resData;
   }
   public function __construct(
     $config = null,
