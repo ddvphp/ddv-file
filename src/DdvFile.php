@@ -1,7 +1,6 @@
 <?php
 
 namespace DdvPhp;
-use const null;
 use DdvPhp\DdvFile\Core as DdvCore;
 
 /**

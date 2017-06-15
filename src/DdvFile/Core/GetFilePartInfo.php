@@ -1,7 +1,6 @@
 <?php
 
 namespace DdvPhp\DdvFile\Core;
-use const null;
 use \DdvPhp\DdvFile\Exception\Input as InputException;
 
 
