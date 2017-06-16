@@ -26,7 +26,7 @@ final class Complete
     }
     
     if(empty($data['fileId'])){
-      throw new InputException('文件id错误','FILE_SHA1_ERROR');
+      throw new InputException('文件id错误','FILE_ID_ERROR');
     }
     // 获取数据库模型
     $db = $attr('database');
