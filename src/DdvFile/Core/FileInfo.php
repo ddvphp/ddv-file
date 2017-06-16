@@ -20,7 +20,7 @@ final class FileInfo
    * @return   [type]
    */
   public static function getFileInfo(\Closure $call, \Closure $attr, $fileId){
-    if(empty($data['fileId'])){
+    if(empty($fileId)){
       throw new InputException('文件id错误','FILE_ID_ERROR');
     }
     // 获取数据库模型
@@ -31,7 +31,7 @@ final class FileInfo
     
     $resData = array();
     $dbKeyToCalssKey = $db->dbKeyToCalssKey;
-    foreach ($data as $key => $value) {
+    foreach ($fileInfo as $key => $value) {
       $key = empty($dbKeyToCalssKey[$key]) ? $key : $dbKeyToCalssKey [$key] ;
       $resData[$key] = $value;
     }
@@ -44,6 +44,9 @@ final class FileInfo
    * @return   [type]
    */
   public static function updateFileInfo(\Closure $call, \Closure $attr, $fileId, array $data){
+    if(empty($fileId)){
+      throw new InputException('文件id错误','FILE_ID_ERROR');
+    }
     $tempData = array(
       'update_time'=>time()
     );
