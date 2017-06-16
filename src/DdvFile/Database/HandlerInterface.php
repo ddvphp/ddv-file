@@ -9,29 +9,13 @@ interface HandlerInterface
   public function open();
   public function close();
   /**
-   * 通过索引url查询文件id
-   * @author: 桦 <yuchonghua@163.com>
-   * @DateTime 2017-06-06T13:40:30+0800
-   * @param    string                   $url      [必填，索引url]
-   * @return   string                             [文件id]
-   */
-  public function getFileIdByIndexUrl($url);
-  /**
    * 通过索引url查询文件信息
    * @author: 桦 <yuchonghua@163.com>
    * @DateTime 2017-06-06T13:42:18+0800
    * @param    string                   $id   [必填，文件id]
    * @return   Array                              [文件信息]
    */
-  public function getFileInfoByFileID($id);
-  /**
-   * 通过索引url查询文件源url
-   * @author: 桦 <yuchonghua@163.com>
-   * @DateTime 2017-06-06T13:42:46+0800
-   * @param    string                   $url      [必填，索引url]
-   * @return   string                             [源文件url]
-   */
-  public function getSourceUrlByIndexUrl($url);
+  public function getFileInfo($id);
   /**
    * 通过crc32、sha1、md5、uid查询文件id
    * @author: 桦 <yuchonghua@163.com>
@@ -75,7 +59,7 @@ interface HandlerInterface
    * @param    [type]                   $data     [description]
    * @return   [type]                             [description]
    */
-  public function updateFileInfoByFileID($id, array $data);
+  public function updateFileInfo($id, array $data);
   /**
    * 插入文件表
    * @author: 桦 <yuchonghua@163.com>

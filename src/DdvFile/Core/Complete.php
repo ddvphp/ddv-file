@@ -1,7 +1,6 @@
 <?php
 
 namespace DdvPhp\DdvFile\Core;
-use const null;
 use \DdvPhp\DdvFile\Exception\Input as InputException;
 
 
@@ -27,12 +26,12 @@ final class Complete
     }
     
     if(empty($data['fileId'])){
-      throw new InputException('文件id错误','FILE_SHA1_ERROR');
+      throw new InputException('文件id错误','FILE_ID_ERROR');
     }
     // 获取数据库模型
     $db = $attr('database');
     // 试图获取文件信息
-    $fileInfo = $db->getFileInfoByFileID((string)$data['fileId']);
+    $fileInfo = $db->getFileInfo((string)$data['fileId']);
     if ($fileInfo['crc32'] !== $data['fileCrc32']) {
       throw new InputException('文件密匙值错误','UPLOAD_CRC32_ERROR');
     }
@@ -62,7 +61,7 @@ final class Complete
       'status'=>'OK'
     );
     // 更新数据库
-    $db->updateFileInfoByFileID((string)$fileInfo['id'], $tempData);
+    $db->updateFileInfo((string)$fileInfo['id'], $tempData);
     // 释放数据
     unset($tempData);
 

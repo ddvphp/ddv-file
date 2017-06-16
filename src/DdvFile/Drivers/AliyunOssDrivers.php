@@ -39,7 +39,7 @@ class AliyunOssDrivers implements \DdvPhp\DdvFile\Drivers\HandlerInterface
     if ($fn instanceof \Closure) {
       return $fn($path);
     }
-    return 'http://pingqu-test.oss-cn-shenzhen.aliyuncs.com/'.$path;
+    return $this->config['urlRoot'].$path;
   }
   /**
    * 获取上传id

@@ -1,39 +1,40 @@
 <?php
 namespace DdvPhp\DdvFile\Database;
-use App\Model\FileModel;
 
 use \DdvPhp\DdvFile\Exception\Database as DatabaseException;
 
 /**
  * 
  */
-class LaravelMysqlDatabase extends DatabaseAbstract
+class CodeIgniterDatabase extends DatabaseAbstract
 {
-  private $model;
-  public function __construct(){
+  private $db;
+  private $table;
+  public function __construct($db, $table){
     parent::__construct();
+    $this->db = &$db;
+    $this->table = $table;
   }
   public function open(){
-    $this->model = FileModel::class;
   }
   public function close(){
 
   }
   /**
    * 通过索引url查询文件信息
-   * @author: 林跃 <769353695@qq.com>
+   * @author: 桦 <yuchonghua@163.com>
    * @DateTime 2017-06-06T13:42:18+0800
    * @param    string                   $id   [必填，文件id]
    * @return   Array                              [文件信息]
    */
   public function getFileInfo($id){
-    $model = $this->model;
     try {
-      $res = $model::where('id',$id)->first();
+      $res = $this->db->select('*')->from($this->table)->where('id',$id)->get()->row_array();
+
       if (empty($res)) {
         throw new DatabaseException('file not find', 'GET_FILE_ID_FAIL');
       }else{
-        return $res->toArray();
+        return $res;
       }
     } catch (Exception $e) {
       throw new DatabaseException($e->getMessage(), 'GET_FILE_ID_FAIL');
@@ -41,7 +42,7 @@ class LaravelMysqlDatabase extends DatabaseAbstract
   }
   /**
    * 通过crc32、sha1、md5、uid查询文件id
-   * @author: 林跃 <769353695@qq.com>
+   * @author: 桦 <yuchonghua@163.com>
    * @DateTime 2017-06-06T13:43:15+0800
    * @param    string                   $md5      [必填，文件md5]
    * @param    string                   $sha1     [必填，文件sha1]
@@ -50,17 +51,19 @@ class LaravelMysqlDatabase extends DatabaseAbstract
    * @return   string                             [文件id]
    */
   public function getFileIdByCrc32Sha1Md5Uid($md5, $sha1, $crc32, $uid){
-    $model = $this->model;
     try {
-      $res = $model::where('uid',$uid)
+      $res = $this->db->select('id')
+            ->from($this->table)
+            ->where('uid',$uid)
             ->where('md5',$md5)
             ->where('sha1',$sha1)
             ->where('crc32',$crc32)
-            ->first(['id']);
+            ->get()
+            ->row_array();
       if (empty($res)) {
         throw new DatabaseException('file not find', 'GET_FILE_ID_FAIL');
       }else{
-        return (string)$res->id;
+        return (string)$res['id'];
       }
     } catch (Exception $e) {
       throw new DatabaseException($e->getMessage(), 'GET_FILE_ID_FAIL');
@@ -68,7 +71,7 @@ class LaravelMysqlDatabase extends DatabaseAbstract
   }
   /**
    * 查询文件列表,可以指定uid
-   * @author: 林跃 <769353695@qq.com>
+   * @author: 桦 <yuchonghua@163.com>
    * @DateTime 2017-06-06T13:44:08+0800
    * @param    string                   $pageNow  [必填，当前页]
    * @param    string                   $pageSize [必填，每页数]
@@ -91,9 +94,8 @@ class LaravelMysqlDatabase extends DatabaseAbstract
    * [uid,id,part_md5_lower,part_md5_upper,type,name,last_modified,status]
    */
   public function getListsByCrc32Sha1Md5($offset = 0, $size = 10, $md5, $sha1, $crc32, $status = null){
-    $model = $this->model;
     try {
-      return $model::where(['md5'=>$md5,'sha1'=>$sha1,'crc32'=>$crc32])->limit($offset,$size)->get([
+      return $this->db->select(array(
         'uid',
         'id',
         'part_md5_lower',
@@ -102,7 +104,14 @@ class LaravelMysqlDatabase extends DatabaseAbstract
         'name',
         'last_modified',
         'status'
-      ])->toArray();
+      ))
+      ->from($this->table)
+      ->where('md5',$md5)
+      ->where('sha1',$sha1)
+      ->where('crc32',$crc32)
+      ->limit($size, $offset)
+      ->get()
+      ->result_array();
     } catch (Exception $e) {
       throw new DatabaseException($e->getMessage(), 'INSERT_FILE_INFO_FAIL');
     }
@@ -116,9 +125,8 @@ class LaravelMysqlDatabase extends DatabaseAbstract
    * @return   [type]                         [description]
    */
   public function updateFileInfo($id,array $data){
-    $model = $this->model;
     try {
-      return $model::where('id', $id)->update($data);
+      return $this->db->where('id',$id)->update($this->table,$data);
     } catch (Exception $e) {
       throw new DatabaseException($e->getMessage(), 'INSERT_FILE_INFO_FAIL');
     }
@@ -131,15 +139,10 @@ class LaravelMysqlDatabase extends DatabaseAbstract
    * @return   string                   $fileId   [返回文件id]
    */
   public function insertFileInfo(array $data){
-    $model = $this->model;
     try {
-      $file = new $model();
-      foreach ($data as $key => $value) {
-        $file->$key = $value;
-      }
-      $file->create_time = time();
-      $file->save();
-      return $file->id;
+      $data['create_time'] = time();
+      $this->db->insert($this->table, $data);
+      return $this->db->insert_id();
     } catch (Exception $e) {
       throw new DatabaseException($e->getMessage(), 'INSERT_FILE_INFO_FAIL');
     }

@@ -1,7 +1,6 @@
 <?php
 
 namespace DdvPhp\DdvFile\Core;
-use const null;
 use \DdvPhp\DdvFile\Exception\Input as InputException;
 
 
@@ -21,11 +20,6 @@ final class GetPartSize
    * @return   [type]
    */
   public static function run(\Closure $call, \Closure $attr, array &$data){
-
-    //$db = $attr('database');
-    //$id = $db->getFileInfoByFileID(3, 4, 'a','s','d');
-    //var_dump($id);
-    //die();
     //判断设备类型
     if (empty($data['deviceType']) || !in_array(strtolower($data['deviceType']), $attr('sysDeviceType'))) {
       throw new InputException('deviceType 不能为空','DEVICE_TYPE_NOT_CAN_EMPTY');

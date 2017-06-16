@@ -1,7 +1,6 @@
 <?php
 
 namespace DdvPhp\DdvFile\Core;
-use const null;
 use \DdvPhp\DdvFile\Exception\Input as InputException;
 
 
@@ -115,7 +114,7 @@ final class GetFileId
     if ($fileId) {
       try {
         // 试图获取文件信息
-        $fileInfo = $db->getFileInfoByFileID((string)$fileId);
+        $fileInfo = $db->getFileInfo((string)$fileId);
         // 输出文件id
         $resData['fileId'] = $fileId;
         // 输出文件原始相对路径
@@ -163,23 +162,11 @@ final class GetFileId
       // 添加到数据库
       $fileId = (string)$db->insertFileInfo($dbData);
       // 输出文件原始相对路径
-      $resData['sourcePath'] = $dbData['path'];
+      $resData['path'] = $dbData['path'];
     }
     // 输出文件原url
     $resData['fileId'] = $fileId;
-    $resData['sourceUrl'] = $driver->getUrlByPath($resData['sourcePath']);
-    // 判断是否使用文件索引系统
-    if ($attr('fileIndex')===true) {
-      // 文件索引模块 - 必须有uid
-      if ($uid===null) {
-        throw new \DdvPhp\DdvFile\Exception\Sys('文件索引必须传入uid','UID_ERROR_BY_DDVFILE');
-      }
-      // 更多逻辑
-    }else{
-      // 直接使用源路径
-      $resData['path'] = $resData['sourcePath'];
-      $resData['url'] = $resData['sourceUrl'];
-    }
+    $resData['url'] = $driver->getUrlByPath($resData['path']);
     // 返回结果
     return $resData;
   }
