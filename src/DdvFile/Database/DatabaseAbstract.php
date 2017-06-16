@@ -11,8 +11,8 @@ abstract class DatabaseAbstract implements HandlerInterface
   }
   public function dbKeyToCalssKeyInit(){
     foreach ($this->calssKeyToDbKey as $value => $key) {
-      if(empty($dbKeyToCalssKey[$key])){
-        $dbKeyToCalssKey[$key] = $value;
+      if(empty($this->dbKeyToCalssKey[$key])){
+        $this->dbKeyToCalssKey[$key] = $value;
       }
     }
   }
@@ -24,6 +24,8 @@ abstract class DatabaseAbstract implements HandlerInterface
     'partSum'=>'part_sum',
     // 扩展名
     'fileExtName'=>'ext_name',
+    // 文件id
+    'fileId'=>'id',
     // 文件名
     'fileName'=>'name',
     // 文件大小
@@ -46,5 +48,9 @@ abstract class DatabaseAbstract implements HandlerInterface
     'lastModified'=>'last_modified',
     // 创建时间
     'createTime'=>'create_time',
+    // 更新时间
+    'upTime'=>'up_time',
+    // 上传
+    'uploadId'=>'upload_id'
   );
 }
