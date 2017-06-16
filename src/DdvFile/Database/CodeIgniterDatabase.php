@@ -6,7 +6,7 @@ use \DdvPhp\DdvFile\Exception\Database as DatabaseException;
 /**
  * 
  */
-class CodeIgniterDatabase implements \DdvPhp\DdvFile\Database\HandlerInterface
+class CodeIgniterDatabase extends DatabaseAbstract
 {
   private $db;
   private $table;

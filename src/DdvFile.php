@@ -60,6 +60,26 @@ class DdvFile
   public function complete(array $data=array()){
     return DdvCore\Complete::run($this->call, $this->attr, $data);
   }
+  /**
+   * [增强方法]获取文件信息
+   * @author: 林跃 <@qq.com>
+   * @DateTime 2017-06-10T16:28:25+0800
+   * @param    array                    $data [description]
+   * @return   [type]                         [description]
+   */
+  public function getFileInfo($fileId){
+    return DdvCore\FileInfo::getFileInfo($this->call, $this->attr, $fileId);
+  }
+  /**
+   * [增强方法]更新文件信息
+   * @author: 林跃 <@qq.com>
+   * @DateTime 2017-06-10T16:28:25+0800
+   * @param    array                    $data [description]
+   * @return   [type]                         [description]
+   */
+  public function updateFileInfo($fileId, array $data=array()){
+    return DdvCore\FileInfo::updateFileInfo($this->call, $this->attr, $fileId, $data);
+  }
   public function getFileIdInputKeys(array $extendKeys=array()){
     return array_merge($this->sysGetFileIdInputKeys, $extendKeys);
   }

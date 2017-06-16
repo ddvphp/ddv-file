@@ -7,7 +7,7 @@ use \DdvPhp\DdvFile\Exception\Database as DatabaseException;
 /**
  * 
  */
-class LaravelMysqlDatabase implements \DdvPhp\DdvFile\Database\HandlerInterface
+class LaravelMysqlDatabase extends DatabaseAbstract
 {
   private $model;
   public function open(){
