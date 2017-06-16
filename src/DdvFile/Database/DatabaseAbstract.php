@@ -10,7 +10,7 @@ abstract class DatabaseAbstract implements HandlerInterface
     $this->dbKeyToCalssKeyInit();
   }
   public function dbKeyToCalssKeyInit(){
-    foreach ($calssKeyToDbKey as $value => $key) {
+    foreach ($this->calssKeyToDbKey as $value => $key) {
       if(empty($dbKeyToCalssKey[$key])){
         $dbKeyToCalssKey[$key] = $value;
       }
