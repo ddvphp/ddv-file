@@ -11,6 +11,7 @@ class CodeIgniterDatabase extends DatabaseAbstract
   private $db;
   private $table;
   public function __construct($db, $table){
+    parent::__construct();
     $this->db = &$db;
     $this->table = $table;
   }

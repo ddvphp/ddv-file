@@ -6,6 +6,17 @@ namespace DdvPhp\DdvFile\Database;
  */
 abstract class DatabaseAbstract implements HandlerInterface
 {
+  public function __construct(){
+    $this->dbKeyToCalssKeyInit();
+  }
+  public function dbKeyToCalssKeyInit(){
+    foreach ($calssKeyToDbKey as $value => $key) {
+      if(empty($dbKeyToCalssKey[$key])){
+        $dbKeyToCalssKey[$key] = $value;
+      }
+    }
+  }
+  public $dbKeyToCalssKey = array();
   public $calssKeyToDbKey = array(
     // 分块大小
     'partSize'=>'part_size',
