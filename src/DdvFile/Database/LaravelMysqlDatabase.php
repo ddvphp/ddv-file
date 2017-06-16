@@ -20,22 +20,13 @@ class LaravelMysqlDatabase extends DatabaseAbstract
 
   }
   /**
-   * 通过url查询文件id
-   * @author: 林跃 <769353695@qq.com>
-   * @DateTime 2017-06-06T13:40:30+0800
-   * @param    string                   $url      [必填，索引url]
-   * @return   string                             [文件id]
-   */
-  public function getFileIdByIndexUrl($url){
-  }
-  /**
    * 通过索引url查询文件信息
    * @author: 林跃 <769353695@qq.com>
    * @DateTime 2017-06-06T13:42:18+0800
    * @param    string                   $id   [必填，文件id]
    * @return   Array                              [文件信息]
    */
-  public function getFileInfoByFileID($id){
+  public function getFileInfo($id){
     $model = $this->model;
     try {
       $res = $model::where('id',$id)->first();
@@ -47,15 +38,6 @@ class LaravelMysqlDatabase extends DatabaseAbstract
     } catch (Exception $e) {
       throw new DatabaseException($e->getMessage(), 'GET_FILE_ID_FAIL');
     }
-  }
-  /**
-   * 通过索引url查询文件源url
-   * @author: 林跃 <769353695@qq.com>
-   * @DateTime 2017-06-06T13:42:46+0800
-   * @param    string                   $url      [必填，索引url]
-   * @return   string                             [源文件url]
-   */
-  public function getSourceUrlByIndexUrl($url){
   }
   /**
    * 通过crc32、sha1、md5、uid查询文件id
@@ -133,7 +115,7 @@ class LaravelMysqlDatabase extends DatabaseAbstract
    * @param    [type]                   $data [description]
    * @return   [type]                         [description]
    */
-  public function updateFileInfoByFileID($id,array $data){
+  public function updateFileInfo($id,array $data){
     $model = $this->model;
     try {
       return $model::where('id', $id)->update($data);

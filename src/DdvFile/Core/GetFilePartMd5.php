@@ -31,7 +31,7 @@ final class GetFilePartMd5
     // 获取数据库模型
     $db = $attr('database');
     // 试图获取文件信息
-    $fileInfo = $db->getFileInfoByFileID((string)$data['fileId']);
+    $fileInfo = $db->getFileInfo((string)$data['fileId']);
     if ($fileInfo['crc32'] !== $data['fileCrc32']) {
       throw new InputException('文件密匙值错误','UPLOAD_CRC32_ERROR');
     }

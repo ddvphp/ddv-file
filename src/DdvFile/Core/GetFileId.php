@@ -114,7 +114,7 @@ final class GetFileId
     if ($fileId) {
       try {
         // 试图获取文件信息
-        $fileInfo = $db->getFileInfoByFileID((string)$fileId);
+        $fileInfo = $db->getFileInfo((string)$fileId);
         // 输出文件id
         $resData['fileId'] = $fileId;
         // 输出文件原始相对路径
@@ -162,22 +162,11 @@ final class GetFileId
       // 添加到数据库
       $fileId = (string)$db->insertFileInfo($dbData);
       // 输出文件原始相对路径
-      $resData['sourcePath'] = $dbData['path'];
+      $resData['path'] = $dbData['path'];
     }
     // 输出文件原url
     $resData['fileId'] = $fileId;
-    $resData['sourceUrl'] = $driver->getUrlByPath($resData['sourcePath']);
-    // 判断是否使用文件索引系统
-    if ($attr('fileIndex')!==FALSE) {
-      $res = $call('getIndexPathUrl', $attr('fileIndex'), $uid, $resData['sourceUrl'], $resData['sourcePath']);
-      $resData['path'] = $res['path'];
-      $resData['url'] = $res['url'];
-      // 更多逻辑
-    }else{
-      // 直接使用源路径
-      $resData['path'] = $resData['sourcePath'];
-      $resData['url'] = $resData['sourceUrl'];
-    }
+    $resData['url'] = $driver->getUrlByPath($resData['path']);
     // 返回结果
     return $resData;
   }

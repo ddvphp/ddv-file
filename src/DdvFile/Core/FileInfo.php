@@ -26,7 +26,7 @@ final class FileInfo
     // 获取数据库模型
     $db = $attr('database');
     // 试图获取文件信息
-    $fileInfo = $db->getFileInfoByFileID((string)$fileId);
+    $fileInfo = $db->getFileInfo((string)$fileId);
     // 构建返回数据
     
     $resData = array();
@@ -58,7 +58,7 @@ final class FileInfo
       $tempData[$key] = $value;
     }
     // 更新数据库
-    $db->updateFileInfoByFileID((string)$fileId, $tempData);
+    $db->updateFileInfo((string)$fileId, $tempData);
     // 释放数据
     unset($tempData);
   }

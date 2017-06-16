@@ -83,13 +83,6 @@ class DdvFile
   public function getFileIdInputKeys(array $extendKeys=array()){
     return array_merge($this->sysGetFileIdInputKeys, $extendKeys);
   }
-  public function getIndexPathUrl($fileIndex, $uid, $url, $path){
-    $resData = array(
-      'url' => $url,
-      'path' => $path
-    );
-    return $resData;
-  }
   public function __construct(
     $config = null,
     // 存储驱动
@@ -169,8 +162,6 @@ class DdvFile
   protected $partSizeMax = 0;
   // 默认一共可以多少块
   protected $partSumMax = 0;
-  // 文件索引模式
-  protected $fileIndex = FALSE;
   // 允许设备
   protected $sysDeviceType = array('ios','android','html5','htmlswf','html4','wxmp');
   // 默认需要的key
