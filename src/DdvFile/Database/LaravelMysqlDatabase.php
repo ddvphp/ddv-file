@@ -10,7 +10,7 @@ use \DdvPhp\DdvFile\Exception\Database as DatabaseException;
 class LaravelMysqlDatabase extends DatabaseAbstract
 {
   private $model;
-  public function __construct($db, $table){
+  public function __construct(){
     parent::__construct();
   }
   public function open(){
