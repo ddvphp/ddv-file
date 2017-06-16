@@ -36,6 +36,8 @@ abstract class DatabaseAbstract implements HandlerInterface
     'fileCrc32'=>'crc32',
     // 文件类型
     'fileType'=>'type',
+    // 文件path
+    'filePath'=>'path',
     // 文件块小写md5集合的md5
     'filePartMd5Lower'=>'part_md5_lower',
     // 文件块大写md5集合的md5
