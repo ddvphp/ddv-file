@@ -118,7 +118,7 @@ final class GetFileId
         // 输出文件id
         $resData['fileId'] = $fileId;
         // 输出文件原始相对路径
-        $resData['sourcePath'] = $fileInfo['path'];
+        $resData['path'] = $fileInfo['path'];
         // 返回文件的上传状态是否完成
         $resData['isUploadEnd'] = $fileInfo['status'] === 'OK';
       } catch (\DdvPhp\DdvFile\Exception\Database $e) {
