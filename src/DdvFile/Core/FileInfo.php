@@ -13,6 +13,11 @@ use \DdvPhp\DdvFile\Exception\Input as InputException;
  */
 final class FileInfo
 {
+  public static function getUrlByPath(\Closure $call, \Closure $attr, $path){
+
+      $driver = $attr('driver');
+      return $driver->getUrlByPath($path);
+  }
   /**
    * @author 桦 <yuchonghua@163.com>
    * @DateTime 2016-04-12T15:23:14+0800

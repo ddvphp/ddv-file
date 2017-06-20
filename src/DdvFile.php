@@ -60,6 +60,9 @@ class DdvFile
   public function complete(array $data=array()){
     return DdvCore\Complete::run($this->call, $this->attr, $data);
   }
+  public function getUrlByPath($path){
+      return DdvCore\FileInfo::getUrlByPath($this->call, $this->attr, $path);
+  }
   /**
    * [增强方法]获取文件信息
    * @author: 林跃 <@qq.com>

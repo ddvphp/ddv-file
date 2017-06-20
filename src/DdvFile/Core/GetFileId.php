@@ -166,7 +166,7 @@ final class GetFileId
     }
     // 输出文件原url
     $resData['fileId'] = $fileId;
-    $resData['url'] = $driver->getUrlByPath($resData['path']);
+    $resData['url'] = $call('getUrlByPath', $resData['path']);
     // 返回结果
     return $resData;
   }
