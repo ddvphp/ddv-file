@@ -159,10 +159,18 @@ final class GetFileId
         'create_time'=> time(),
       );
       $dbData['path'] = method_exists($driver, 'getFilePath') ? $driver->getFilePath($data) : self::getFilePath($data);
+      // 强制/开头
+      if (substr($dbData['path'],0,1) !== '/') {
+        $dbData['path'] = '/'.$dbData['path'];
+      }
       // 添加到数据库
       $fileId = (string)$db->insertFileInfo($dbData);
       // 输出文件原始相对路径
       $resData['path'] = $dbData['path'];
+    }
+    // 强制/开头
+    if (substr($resData['path'],0,1) !== '/') {
+      $resData['path'] = '/'.$resData['path'];
     }
     // 输出文件原url
     $resData['fileId'] = $fileId;
