@@ -48,9 +48,14 @@ class AliyunOssDrivers implements \DdvPhp\DdvFile\Drivers\HandlerInterface
    * @param    string                  $path [description]
    * @return   [type]                        [description]
    */
-  public function getUploadId($path){
+  public function getUploadId($path, $options=array()){
     try{
-      return $this->client->initiateMultipartUpload($this->config['bucket'], $this->getObjectKeyByPath($path));
+      if ($options['headers']) {
+        $headers = $options['headers'];
+        unset($options['headers']);
+        $options[OssClient::OSS_HEADERS] = $headers;
+      }
+      return $this->client->initiateMultipartUpload($this->config['bucket'], $this->getObjectKeyByPath($path), $options);
     } catch(\OSS\Core\OssException $e) {
       throw new DriverException($e->getMessage(), 'GET_UPLOAD_ID');
     }

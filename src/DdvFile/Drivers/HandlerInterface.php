@@ -23,7 +23,7 @@ interface HandlerInterface
    * @param    string                  $path [description]
    * @return   [type]                        [description]
    */
-  public function getUploadId($path);
+  public function getUploadId($path, $options=array());
   /**
    * 获取已经完成的分块
    * @author: 桦 <yuchonghua@163.com>

@@ -69,7 +69,12 @@ final class GetFilePartInfo
     if (empty($fileInfo['upload_id'])) {
       $tempData = array(
         // 获取上传id
-        'upload_id'=>$driver->getUploadId($fileInfo['path'])
+        'upload_id'=>$driver->getUploadId($fileInfo['path'], array(
+          'headers' => array(
+            'Content-Type' => $fileInfo['type'],
+            'Content-Disposition' => 'attachment; filename="'.$fileInfo['name'].'"'
+          )
+        ))
       );
       // 更新数据库
       $db->updateFileInfo((string)$fileInfo['id'], $tempData);
