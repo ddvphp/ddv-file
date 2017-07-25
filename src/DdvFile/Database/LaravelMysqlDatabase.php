@@ -133,13 +133,8 @@ class LaravelMysqlDatabase extends DatabaseAbstract
   public function insertFileInfo(array $data){
     $model = $this->model;
     try {
-      $file = new $model();
-      foreach ($data as $key => $value) {
-        $file->$key = $value;
-      }
-      $file->create_time = time();
-      $file->save();
-      return $file->id;
+      $data['create_time'] = time();
+      return $model::insertGetId($data);
     } catch (Exception $e) {
       throw new DatabaseException($e->getMessage(), 'INSERT_FILE_INFO_FAIL');
     }
